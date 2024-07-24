@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Gridmanager : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class Gridmanager : MonoBehaviour
     [SerializeField] private int CellSize;
     [SerializeField] private GameObject blockPrefab;
     [SerializeField] private GameObject gridHolder;
-    [SerializeField] private GameObject prevBlock;
+    [SerializeField] private GameObject leftBlock;
+    [SerializeField] private GameObject bottomBlock;
     void Start()
     {
         generateGrid();
@@ -31,14 +33,22 @@ public class Gridmanager : MonoBehaviour
                 var joint = block.GetComponent<FixedJoint2D>();
                 if (j>0)
                 {
-                    joint.connectedBody = prevBlock.GetComponent<Rigidbody2D>();
+                    joint.connectedBody = leftBlock.GetComponent<Rigidbody2D>();
                 }
                 else
                 {
-                    joint.enabled = false;
+                    if (i>0)
+                    {
+                        joint.connectedBody = bottomBlock.GetComponent<Rigidbody2D>();
+                    }
+                    else
+                    {
+                        joint.enabled = false;
+                    }
+                    bottomBlock = block;
                 }
 
-                prevBlock = block;
+                leftBlock = block;
             }   
         }
     }
