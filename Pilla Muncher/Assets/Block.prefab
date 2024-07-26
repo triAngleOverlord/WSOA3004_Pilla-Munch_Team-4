@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1863546827725087948}
   - component: {fileID: 2795033093277838343}
   - component: {fileID: 7557357862385194869}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Block
-  m_TagString: Untagged
+  m_TagString: Apple
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -189,7 +189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7402228734149824773}
   - component: {fileID: 2730944547174587927}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Square (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
