@@ -11,6 +11,7 @@ public class WormController : MonoBehaviour
     private Vector2 direction = Vector2.up;
     private Vector2 nextDirection = Vector2.up;
     private bool isMoving = false;
+    private bool canMove = true;
 
     void Start()
     {
@@ -29,7 +30,10 @@ public class WormController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isMoving)
+        // Check if any segment is touching the ground or an apple
+        canMove = IsTouchingGroundOrApple();
+
+        if (isMoving && canMove)
         {
             Move();
             isMoving = false;
@@ -40,31 +44,34 @@ public class WormController : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && direction != Vector2.down)
+        if (canMove)
         {
-            nextDirection = Vector2.up;
-            isMoving = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) && direction != Vector2.up)
-        {
-            nextDirection = Vector2.down;
-            isMoving = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftArrow) && direction != Vector2.right)
-        {
-            nextDirection = Vector2.left;
-            isMoving = true;
-        }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && direction != Vector2.left)
-        {
-            nextDirection = Vector2.right;
-            isMoving = true;
-        }
+            if (Input.GetKeyDown(KeyCode.UpArrow) && direction != Vector2.down)
+            {
+                nextDirection = Vector2.up;
+                isMoving = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow) && direction != Vector2.up)
+            {
+                nextDirection = Vector2.down;
+                isMoving = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.LeftArrow) && direction != Vector2.right)
+            {
+                nextDirection = Vector2.left;
+                isMoving = true;
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) && direction != Vector2.left)
+            {
+                nextDirection = Vector2.right;
+                isMoving = true;
+            }
 
-        // Update the direction only if the new direction is not the opposite of the current direction
-        if (isMoving && direction + nextDirection != Vector2.zero)
-        {
-            direction = nextDirection;
+            // Update the direction only if the new direction is not the opposite of the current direction
+            if (isMoving && direction + nextDirection != Vector2.zero)
+            {
+                direction = nextDirection;
+            }
         }
     }
 
@@ -77,7 +84,7 @@ public class WormController : MonoBehaviour
         segments[0].transform.position = new Vector3(
             Mathf.Round(newPosition.x),
             Mathf.Round(newPosition.y),
-            newPosition.z
+            Mathf.Round(newPosition.z) // Round the z position as well, just in case
         );
 
         // Move the body segments
@@ -87,12 +94,12 @@ public class WormController : MonoBehaviour
             segments[i].transform.position = new Vector3(
                 Mathf.Round(previousPosition.x),
                 Mathf.Round(previousPosition.y),
-                previousPosition.z
+                Mathf.Round(previousPosition.z) // Round the z position as well, just in case
             );
             previousPosition = tempPosition;
         }
 
-        // Clamp the positions of all segments
+        // Clamp the positions of all segments to ensure they are integers
         foreach (var segment in segments)
         {
             ClampPosition(segment);
@@ -106,7 +113,7 @@ public class WormController : MonoBehaviour
             segment.transform.position = new Vector3(
                 Mathf.Round(segment.transform.position.x),
                 Mathf.Round(segment.transform.position.y),
-                segment.transform.position.z
+                Mathf.Round(segment.transform.position.z) // Round the z position as well, just in case
             );
         }
     }
@@ -161,6 +168,7 @@ public class WormController : MonoBehaviour
                 if (Mathf.Abs(directionToApple.x) <= 1 && Mathf.Abs(directionToApple.y) <= 1 && (Mathf.Abs(directionToApple.x) == 0 || Mathf.Abs(directionToApple.y) == 0))
                 {
                     isNextToApple = true;
+                    //Debug.Log("Body is directly next to an apple.");
                     break;
                 }
             }
@@ -171,7 +179,7 @@ public class WormController : MonoBehaviour
 
     public void SetGravity(bool enableGravity)
     {
-        float gravityScale = enableGravity ? 1f : 0f;
+        float gravityScale = enableGravity ? 0.1f : 0f;
         foreach (var segment in segments)
         {
             if (segment != null)
@@ -183,5 +191,21 @@ public class WormController : MonoBehaviour
                 }
             }
         }
+    }
+
+    bool IsTouchingGroundOrApple()
+    {
+        foreach (var segment in segments)
+        {
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 1f);
+            foreach (var hitCollider in hitColliders)
+            {
+                if (hitCollider.CompareTag("Ground") || hitCollider.CompareTag("Apple"))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

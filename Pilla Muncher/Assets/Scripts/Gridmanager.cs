@@ -19,7 +19,7 @@ public class Gridmanager : MonoBehaviour
 
     private void generateGrid()
     {
-        var relativeXZero = 0 - CellSize*gridSize.x / 2+ 0.5f*CellSize;
+        var relativeXZero = 0 - CellSize*gridSize.x / 2+ 1f*CellSize;
         var relativeYZero = 0 - 3.5f;
         var x = gridSize.x;
         var y = gridSize.y;
