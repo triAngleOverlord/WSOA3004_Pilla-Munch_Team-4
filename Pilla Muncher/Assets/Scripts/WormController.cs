@@ -1,4 +1,4 @@
-
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -78,6 +78,7 @@ public class WormController : MonoBehaviour
 
     void Move()
     {
+        Physics2D.IgnoreLayerCollision(3,7,true);
         // Move the head
         Vector3 previousPosition = segments[0].transform.position;
         Vector3 newPosition = previousPosition + new Vector3(direction.x, direction.y, 0);
@@ -105,6 +106,8 @@ public class WormController : MonoBehaviour
         {
             ClampPosition(segment);
         }
+
+        Physics2D.IgnoreLayerCollision(3, 7, false);
     }
 
     void ClampPosition(GameObject segment)
@@ -160,18 +163,18 @@ public class WormController : MonoBehaviour
     {
         bool isNextToApple = false;
 
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(body.transform.position, 1f);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(body.transform.position, 0.51f);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Apple"))
             {
+                /*
                 Vector3 directionToApple = hitCollider.transform.position - body.transform.position;
                 if (Mathf.Abs(directionToApple.x) <= 1 && Mathf.Abs(directionToApple.y) <= 1 && (Mathf.Abs(directionToApple.x) == 0 || Mathf.Abs(directionToApple.y) == 0))
-                {
-                    isNextToApple = true;
-                    //Debug.Log("Body is directly next to an apple.");
-                    break;
-                }
+                {*/
+                isNextToApple = true;
+                //Debug.Log("Body is directly next to an apple.");
+                break;
             }
         }
 
@@ -190,15 +193,27 @@ public class WormController : MonoBehaviour
                 {
                     rb.gravityScale = gravityScale;
                 }
+
+                if (!enableGravity)
+                {
+                    rb.constraints = RigidbodyConstraints2D.FreezeAll;
+                  //  rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+                }
+                else
+                {
+                    //rb.constraints = RigidbodyConstraints2D.None;
+                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                }
             }
         }
     }
+
 
     bool IsTouchingGroundOrApple()
     {
         foreach (var segment in segments)
         {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 1f);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 0.51f);
             foreach (var hitCollider in hitColliders)
             {
                 if (hitCollider.CompareTag("Ground") || hitCollider.CompareTag("Apple"))
@@ -207,6 +222,16 @@ public class WormController : MonoBehaviour
                 }
             }
         }
+
         return false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Apple"))
+        {
+          Destroy(other.transform.parent.gameObject);
+            Debug.Log("Destroying");
+        }
     }
 }
