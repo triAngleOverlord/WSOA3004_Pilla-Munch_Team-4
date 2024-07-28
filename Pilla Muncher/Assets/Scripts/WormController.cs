@@ -79,7 +79,8 @@ public class WormController : MonoBehaviour
     void Move()
     {
         Physics2D.IgnoreLayerCollision(3, 7, true);
-        // Move the head
+
+        // Move and rotate the head
         Vector3 previousPosition = segments[0].transform.position;
         Vector3 newPosition = previousPosition + new Vector3(direction.x, direction.y, 0);
 
@@ -89,7 +90,10 @@ public class WormController : MonoBehaviour
             Mathf.Round(newPosition.z) // Round the z position as well, just in case
         );
 
-        // Move the body segments
+        // Rotate the head to face the direction of movement
+        segments[0].transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+
+        // Move and rotate the body segments
         for (int i = 1; i < segments.Count; i++)
         {
             Vector3 tempPosition = segments[i].transform.position;
@@ -98,6 +102,10 @@ public class WormController : MonoBehaviour
                 Mathf.Round(previousPosition.y),
                 Mathf.Round(previousPosition.z) // Round the z position as well, just in case
             );
+
+            // Rotate the body segments to face the direction of movement
+            segments[i].transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+
             previousPosition = tempPosition;
         }
 
@@ -109,6 +117,7 @@ public class WormController : MonoBehaviour
 
         Physics2D.IgnoreLayerCollision(3, 7, false);
     }
+
 
     void ClampPosition(GameObject segment)
     {
