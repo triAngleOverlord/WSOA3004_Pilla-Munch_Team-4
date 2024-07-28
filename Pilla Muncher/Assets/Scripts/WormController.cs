@@ -195,7 +195,7 @@ public class WormController : MonoBehaviour
                 }
 
                 if (!enableGravity)
-                {
+                { 
                     rb.constraints = RigidbodyConstraints2D.FreezeAll;
                   //  rb.constraints = RigidbodyConstraints2D.FreezePositionY;
                 }
