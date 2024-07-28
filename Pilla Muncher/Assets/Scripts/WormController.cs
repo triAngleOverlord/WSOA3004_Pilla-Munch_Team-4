@@ -78,7 +78,7 @@ public class WormController : MonoBehaviour
 
     void Move()
     {
-        Physics2D.IgnoreLayerCollision(3,7,true);
+        Physics2D.IgnoreLayerCollision(3, 7, true);
         // Move the head
         Vector3 previousPosition = segments[0].transform.position;
         Vector3 newPosition = previousPosition + new Vector3(direction.x, direction.y, 0);
@@ -163,17 +163,14 @@ public class WormController : MonoBehaviour
     {
         bool isNextToApple = false;
 
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(body.transform.position, 0.51f);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(body.transform.position, 0.5f);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Apple"))
             {
-                /*
-                Vector3 directionToApple = hitCollider.transform.position - body.transform.position;
-                if (Mathf.Abs(directionToApple.x) <= 1 && Mathf.Abs(directionToApple.y) <= 1 && (Mathf.Abs(directionToApple.x) == 0 || Mathf.Abs(directionToApple.y) == 0))
-                {*/
+                Debug.Log("next to apple");
+
                 isNextToApple = true;
-                //Debug.Log("Body is directly next to an apple.");
                 break;
             }
         }
@@ -183,7 +180,7 @@ public class WormController : MonoBehaviour
 
     public void SetGravity(bool enableGravity)
     {
-        float gravityScale = enableGravity ? 0.1f : 0f;
+        float gravityScale = enableGravity ? 1f : 0f;
         foreach (var segment in segments)
         {
             if (segment != null)
@@ -195,13 +192,12 @@ public class WormController : MonoBehaviour
                 }
 
                 if (!enableGravity)
-                { 
+                {
                     rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                  //  rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+                    //Debug.Log("Gravity set to 0");
                 }
                 else
                 {
-                    //rb.constraints = RigidbodyConstraints2D.None;
                     rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 }
             }
@@ -213,7 +209,7 @@ public class WormController : MonoBehaviour
     {
         foreach (var segment in segments)
         {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 0.51f);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 0.5f);
             foreach (var hitCollider in hitColliders)
             {
                 if (hitCollider.CompareTag("Ground") || hitCollider.CompareTag("Apple"))
@@ -230,7 +226,7 @@ public class WormController : MonoBehaviour
     {
         if (other.CompareTag("Apple"))
         {
-          Destroy(other.transform.parent.gameObject);
+            Destroy(other.transform.parent.gameObject);
             Debug.Log("Destroying");
         }
     }
