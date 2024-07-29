@@ -8,6 +8,13 @@ public class WormController : MonoBehaviour
     public GameObject body;
     public GameObject tail;
 
+    public Sprite headUpSprite;
+    public Sprite headDownSprite;
+    public Sprite headHorizontalSprite; // Use this for both left and right
+    public Sprite tailUpSprite;
+    public Sprite tailDownSprite;
+    public Sprite tailHorizontalSprite; // Use this for both left and right
+
     private List<GameObject> segments = new List<GameObject>();
     private Vector2 direction = Vector2.up;
     private Vector2 nextDirection = Vector2.up;
@@ -78,28 +85,57 @@ public class WormController : MonoBehaviour
 
     void Move()
     {
-        Physics2D.IgnoreLayerCollision(3,7,true);
-        // Move the head
-        Vector3 previousPosition = segments[0].transform.position;
-        Vector3 newPosition = previousPosition + new Vector3(direction.x, direction.y, 0);
+        Physics2D.IgnoreLayerCollision(3, 7, true);
 
+        // Store the current positions and rotations of each segment
+        List<Vector3> previousPositions = new List<Vector3>();
+        List<Quaternion> previousRotations = new List<Quaternion>();
+        foreach (var segment in segments)
+        {
+            previousPositions.Add(segment.transform.position);
+            previousRotations.Add(segment.transform.rotation);
+        }
+
+        // Move and rotate the head
+        Vector3 newPosition = previousPositions[0] + new Vector3(direction.x, direction.y, 0);
         segments[0].transform.position = new Vector3(
             Mathf.Round(newPosition.x),
             Mathf.Round(newPosition.y),
             Mathf.Round(newPosition.z) // Round the z position as well, just in case
         );
+        Quaternion headRotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
+        segments[0].transform.rotation = headRotation;
 
-        // Move the body segments
-        for (int i = 1; i < segments.Count; i++)
+        // Update the head sprite based on the rotation
+        float headRotationAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        UpdateSprite(segments[0], headRotationAngle, true);
+
+        // Move and rotate the body segments to follow the previous segment's position
+        for (int i = 1; i < segments.Count - 1; i++)
         {
-            Vector3 tempPosition = segments[i].transform.position;
             segments[i].transform.position = new Vector3(
-                Mathf.Round(previousPosition.x),
-                Mathf.Round(previousPosition.y),
-                Mathf.Round(previousPosition.z) // Round the z position as well, just in case
+                Mathf.Round(previousPositions[i - 1].x),
+                Mathf.Round(previousPositions[i - 1].y),
+                Mathf.Round(previousPositions[i - 1].z) // Round the z position as well, just in case
             );
-            previousPosition = tempPosition;
+
+            // Apply the head's rotation to the body segments
+            segments[i].transform.rotation = headRotation;
         }
+
+        // Move the tail to the previous position of the last body segment
+        segments[segments.Count - 1].transform.position = new Vector3(
+            Mathf.Round(previousPositions[segments.Count - 2].x),
+            Mathf.Round(previousPositions[segments.Count - 2].y),
+            Mathf.Round(previousPositions[segments.Count - 2].z) // Round the z position as well, just in case
+        );
+
+        // Apply the previous rotation of the last body segment to the tail
+        segments[segments.Count - 1].transform.rotation = previousRotations[segments.Count - 2];
+
+        // Update the tail sprite based on the previous rotation of the last body segment
+        float tailRotationAngle = previousRotations[segments.Count - 2].eulerAngles.z;
+        UpdateSprite(segments[segments.Count - 1], tailRotationAngle, false);
 
         // Clamp the positions of all segments to ensure they are integers
         foreach (var segment in segments)
@@ -109,6 +145,76 @@ public class WormController : MonoBehaviour
 
         Physics2D.IgnoreLayerCollision(3, 7, false);
     }
+
+    void UpdateSprite(GameObject segment, float rotationAngle, bool isHead)
+    {
+        SpriteRenderer spriteRenderer = null;
+
+        // Find the SpriteRenderer component in the child GameObjects
+        if (segment.transform.childCount > 0)
+        {
+            spriteRenderer = segment.transform.GetChild(0).GetComponent<SpriteRenderer>();
+        }
+
+        if (spriteRenderer != null)
+        {
+            if (isHead)
+            {
+                if (rotationAngle == 0)
+                {
+                    spriteRenderer.sprite = headHorizontalSprite;
+                    spriteRenderer.flipX = true; // Horizontal sprite facing right
+                    spriteRenderer.flipY = false;
+
+                }
+                else if (rotationAngle == 90 || rotationAngle == -270)
+                {
+                    spriteRenderer.sprite = headUpSprite;
+                    spriteRenderer.flipX = true; // Up sprite facing left
+                }
+                else if (rotationAngle == 180 || rotationAngle == -180)
+                {
+                    spriteRenderer.sprite = headHorizontalSprite;
+                    spriteRenderer.flipX = true; // Horizontal sprite facing left
+                    spriteRenderer.flipY = true;
+                }
+                else if (rotationAngle == 270 || rotationAngle == -90)
+                {
+                    spriteRenderer.sprite = headDownSprite;
+                    spriteRenderer.flipX = true; // Down sprite facing left
+                }
+            }
+            else
+            {
+                if (rotationAngle == 0)
+                {
+                    spriteRenderer.sprite = tailHorizontalSprite;
+                    spriteRenderer.flipX = true; // Horizontal sprite facing right
+                    spriteRenderer.flipY = false;
+
+                }
+                else if (rotationAngle == 90 || rotationAngle == -270)
+                {
+                    spriteRenderer.sprite = tailUpSprite;
+                    spriteRenderer.flipX = true; // Up sprite facing left
+                }
+                else if (rotationAngle == 180 || rotationAngle == -180)
+                {
+                    spriteRenderer.sprite = tailHorizontalSprite;
+                    spriteRenderer.flipX = true; // Horizontal sprite facing left
+                    spriteRenderer.flipY = true;
+
+                }
+                else if (rotationAngle == 270 || rotationAngle == -90)
+                {
+                    spriteRenderer.sprite = tailDownSprite;
+                    spriteRenderer.flipX = true; // Down sprite facing left
+                }
+            }
+        }
+    }
+
+
 
     void ClampPosition(GameObject segment)
     {
@@ -163,17 +269,14 @@ public class WormController : MonoBehaviour
     {
         bool isNextToApple = false;
 
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(body.transform.position, 0.51f);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(body.transform.position, 0.5f);
         foreach (var hitCollider in hitColliders)
         {
             if (hitCollider.CompareTag("Apple"))
             {
-                /*
-                Vector3 directionToApple = hitCollider.transform.position - body.transform.position;
-                if (Mathf.Abs(directionToApple.x) <= 1 && Mathf.Abs(directionToApple.y) <= 1 && (Mathf.Abs(directionToApple.x) == 0 || Mathf.Abs(directionToApple.y) == 0))
-                {*/
+                Debug.Log("next to apple");
+
                 isNextToApple = true;
-                //Debug.Log("Body is directly next to an apple.");
                 break;
             }
         }
@@ -183,7 +286,7 @@ public class WormController : MonoBehaviour
 
     public void SetGravity(bool enableGravity)
     {
-        float gravityScale = enableGravity ? 0.1f : 0f;
+        float gravityScale = enableGravity ? 1f : 0f;
         foreach (var segment in segments)
         {
             if (segment != null)
@@ -195,25 +298,23 @@ public class WormController : MonoBehaviour
                 }
 
                 if (!enableGravity)
-                { 
+                {
                     rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                  //  rb.constraints = RigidbodyConstraints2D.FreezePositionY;
+                    //Debug.Log("Gravity set to 0");
                 }
                 else
                 {
-                    //rb.constraints = RigidbodyConstraints2D.None;
                     rb.constraints = RigidbodyConstraints2D.FreezeRotation;
                 }
             }
         }
     }
 
-
     bool IsTouchingGroundOrApple()
     {
         foreach (var segment in segments)
         {
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 0.51f);
+            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(segment.transform.position, 0.5f);
             foreach (var hitCollider in hitColliders)
             {
                 if (hitCollider.CompareTag("Ground") || hitCollider.CompareTag("Apple"))
@@ -230,7 +331,7 @@ public class WormController : MonoBehaviour
     {
         if (other.CompareTag("Apple"))
         {
-          Destroy(other.transform.parent.gameObject);
+            Destroy(other.transform.parent.gameObject);
             Debug.Log("Destroying");
         }
     }
