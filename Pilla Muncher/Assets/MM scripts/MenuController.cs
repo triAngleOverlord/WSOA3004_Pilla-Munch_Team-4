@@ -61,11 +61,13 @@ public class MenuController : MonoBehaviour
             if (i == currentIndex)
             {
                 // change colour if you want 
+                // instead of colour changing, make the button bigger 
                 levelButtons[i].GetComponent<Image>().color = Color.gray;
             }
             else
             {
                 // again change colour if you want <3
+                // here have all the buttons of a smaller size 
                 levelButtons[i].GetComponent<Image>().color = Color.white;
             }
         }
