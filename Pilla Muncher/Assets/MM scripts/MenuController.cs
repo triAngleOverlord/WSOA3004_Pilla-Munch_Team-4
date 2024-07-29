@@ -5,20 +5,29 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
-    public GameObject[] levelButtons; 
-    public TextMeshProUGUI levelNameText; 
-    public string[] levelNames; 
+    public GameObject[] levelButtons;
+    public TextMeshProUGUI levelNameText;
+    public string[] levelNames;
 
-    public int columns = 4; 
+    public int columns = 4;
 
     private int currentIndex = 0;
+    private Vector3 originalScale;
+    private Vector3 selectedScale;
 
     void Start()
     {
+        
+        if (levelButtons.Length > 0)
+        {
+            originalScale = levelButtons[0].transform.localScale;
+            selectedScale = originalScale * 1.2f; 
+        }
+
         UpdateLevelSelection();
     }
 
-    void Update()// change accordingly if needed 
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
@@ -60,22 +69,20 @@ public class MenuController : MonoBehaviour
         {
             if (i == currentIndex)
             {
-                // change colour if you want 
-                // instead of colour changing, make the button bigger 
-                levelButtons[i].GetComponent<Image>().color = Color.gray;
+                
+                levelButtons[i].transform.localScale = selectedScale;
             }
             else
             {
-                // again change colour if you want <3
-                // here have all the buttons of a smaller size 
-                levelButtons[i].GetComponent<Image>().color = Color.white;
+                
+                levelButtons[i].transform.localScale = originalScale;
             }
         }
     }
 
     void LoadSelectedLevel()
     {
-       
+        
         SceneManager.LoadScene(levelNames[currentIndex]);
     }
 }
