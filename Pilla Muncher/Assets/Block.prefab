@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2795033093277838343}
   - component: {fileID: 1343704747235867425}
   - component: {fileID: 7557357862385194869}
+  - component: {fileID: 6234141725496288546}
   m_Layer: 7
   m_Name: Block
   m_TagString: Apple
@@ -207,6 +208,25 @@ BoxCollider2D:
   m_Size: {x: 0.1, y: 1}
   m_EdgeRadius: 0
 --- !u!255 &7557357862385194869
+FixedJoint2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 753271771121869037}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_EnableCollision: 0
+  m_ConnectedRigidBody: {fileID: 0}
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_BreakAction: 3
+  m_AutoConfigureConnectedAnchor: 1
+  m_Anchor: {x: 0, y: 0}
+  m_ConnectedAnchor: {x: 0, y: 0}
+  m_DampingRatio: 0
+  m_Frequency: 0
+--- !u!255 &6234141725496288546
 FixedJoint2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
