@@ -1249,7 +1249,7 @@ MonoBehaviour:
   body: {fileID: 339671984}
   tail: {fileID: 1422532407}
   headUpSprite: {fileID: 21300000, guid: 83c112c82d7abd54fa02209e979f81d6, type: 3}
-  headDownSprite: {fileID: 21300000, guid: 35f37e51aecf1bb4ab78851c58d62b0e, type: 3}
+  headDownSprite: {fileID: 21300000, guid: c20ced52511e3b64a880b0efd3437e00, type: 3}
   headHorizontalSprite: {fileID: 21300000, guid: 0dd65bd28a31069418c3bdbff476deba, type: 3}
   tailUpSprite: {fileID: 21300000, guid: 812d034ecdea3dd46b27be4afc01c5ce, type: 3}
   tailDownSprite: {fileID: 21300000, guid: 88a844158a11d2b45a0283ad5e5c624a, type: 3}
