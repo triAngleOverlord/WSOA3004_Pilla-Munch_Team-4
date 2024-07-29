@@ -43,27 +43,24 @@ public class Gridmanager : MonoBehaviour
             {
                 var block = Instantiate(blockPrefab, gridHolder.transform);
                 block.transform.position = new Vector3(relativeXZero + j, relativeYZero + i);
-                var joint = block.GetComponent<FixedJoint2D>();
-                if (j > 0)
+                var joints = block.GetComponents<FixedJoint2D>();
+                if (i>0)
                 {
-                    joint.connectedBody = leftBlock.GetComponent<Rigidbody2D>();
+                    joints[1].connectedBody = blocks[blocks.Count - (int)gridSize.x].GetComponent<Rigidbody2D>();
                 }
                 else
                 {
-                    if (i > 0)
-                    {
-                        joint.connectedBody = bottomBlock.GetComponent<Rigidbody2D>();
-                    }
-                    else
-                    {
-                        joint.enabled = false;
-                    }
-
-                    bottomBlock = block;
+                    joints[1].enabled = false;
                 }
-
+                if (j > 0)
+                {
+                    joints[0].connectedBody = leftBlock.GetComponent<Rigidbody2D>();
+                }
+                else
+                {
+                    joints[0].enabled = false;
+                }
                 blocks.Add(block);
-
                 leftBlock = block;
             }
         }
