@@ -216,7 +216,7 @@ Transform:
   - {fileID: 2866820540394406928}
   - {fileID: 1378005727392887646}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6702325175351596993
 GameObject:
@@ -228,6 +228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8617350877290398619}
   - component: {fileID: 5722503251345599299}
+  - component: {fileID: 6107917315819660082}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -302,6 +303,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &6107917315819660082
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6702325175351596993}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 91e8b45a4fd812c47ba08321e2de3c85, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7359873277873634639
 GameObject:
   m_ObjectHideFlags: 0
@@ -593,6 +615,7 @@ MonoBehaviour:
   tailUpSprite: {fileID: 21300000, guid: 812d034ecdea3dd46b27be4afc01c5ce, type: 3}
   tailDownSprite: {fileID: 21300000, guid: 88a844158a11d2b45a0283ad5e5c624a, type: 3}
   tailHorizontalSprite: {fileID: 21300000, guid: ab242886ca7fc8d4bb702f0377ba6bf7, type: 3}
+  tailAnimator: {fileID: 6107917315819660082}
 --- !u!1 &7654899202143548238
 GameObject:
   m_ObjectHideFlags: 0

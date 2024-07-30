@@ -123,32 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &64581661 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6702325175351596993, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
-  m_PrefabInstance: {fileID: 685856651020725721}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &64581663
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 64581661}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 91e8b45a4fd812c47ba08321e2de3c85, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &115197984
 GameObject:
   m_ObjectHideFlags: 0
@@ -332,17 +306,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1659327200229408639, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
-      propertyPath: tailAnimator
-      value: 
-      objectReference: {fileID: 64581663}
     - target: {fileID: 4553996408260123840, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
       propertyPath: m_Name
       value: Worm
-      objectReference: {fileID: 0}
-    - target: {fileID: 5722503251345599299, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8773128765358110462, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
       propertyPath: m_RootOrder
@@ -391,10 +357,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6702325175351596993, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 64581663}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d1a043fe2b45614a9320b9156ffdf20, type: 3}
 --- !u!1001 &2407123427894594171
 PrefabInstance:
