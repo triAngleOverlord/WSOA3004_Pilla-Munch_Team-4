@@ -12,12 +12,14 @@ public class Gridmanager : MonoBehaviour
     [SerializeField] private GameObject gridHolder;
     [SerializeField] private GameObject leftBlock;
     [SerializeField] private GameObject bottomBlock;
+    [SerializeField] private SolutionController sc;
 
     private List<GameObject> blocks = new List<GameObject>();
 
     void Start()
     {
         generateGrid();
+        sc._blocks = blocks;
     }
 
     private void generateGrid()
