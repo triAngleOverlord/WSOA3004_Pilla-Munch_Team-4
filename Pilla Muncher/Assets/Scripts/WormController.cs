@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement; // Add this directive
 using System.Collections.Generic;
 
 public class WormController : MonoBehaviour
@@ -36,6 +37,12 @@ public class WormController : MonoBehaviour
     void Update()
     {
         HandleInput();
+
+        // Check for reset button press
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            ReloadScene();
+        }
     }
 
     void FixedUpdate()
@@ -56,12 +63,14 @@ public class WormController : MonoBehaviour
     {
         if (canMove)
         {
+            bool isHeadTouchingGround = IsHeadTouchingGround();
+
             if (Input.GetKeyDown(KeyCode.UpArrow) && direction != Vector2.down)
             {
                 nextDirection = Vector2.up;
                 isMoving = true;
             }
-            else if (Input.GetKeyDown(KeyCode.DownArrow) && direction != Vector2.up)
+            else if (Input.GetKeyDown(KeyCode.DownArrow) && direction != Vector2.up && !isHeadTouchingGround)
             {
                 nextDirection = Vector2.down;
                 isMoving = true;
@@ -84,6 +93,21 @@ public class WormController : MonoBehaviour
             }
         }
     }
+
+    bool IsHeadTouchingGround()
+    {
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(head.transform.position, 0.5f);
+        foreach (var hitCollider in hitColliders)
+        {
+            if (hitCollider.CompareTag("Ground"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     void Move()
     {
@@ -136,7 +160,7 @@ public class WormController : MonoBehaviour
         segments[segments.Count - 1].transform.rotation = previousRotations[segments.Count - 2];
 
         // Update the tail sprite based on the previous rotation of the last body segment
-      
+
         float tailRotationAngle = previousRotations[segments.Count - 2].eulerAngles.z;
         UpdateSprite(segments[segments.Count - 1], tailRotationAngle, false);
 
@@ -221,8 +245,6 @@ public class WormController : MonoBehaviour
         }
     }
 
-
-
     void ClampPosition(GameObject segment)
     {
         if (segment != null)
@@ -282,17 +304,14 @@ public class WormController : MonoBehaviour
             if (hitCollider.CompareTag("Apple"))
             {
                 Debug.Log("next to apple");
-                if (hitCollider.transform.position.y <= transform.position.y+0.3f) 
+                if (hitCollider.transform.position.y <= transform.position.y + 0.3f)
                 {
                     isNextToApple = true;
                     break;
                 }
-                
-                
             }
         }
 
-       
         SetGravity(!isNextToApple);
     }
 
@@ -347,5 +366,10 @@ public class WormController : MonoBehaviour
             SolutionController.Instance._blocks.Remove(other.gameObject);
             Debug.Log("Destroying");
         }
+    }
+
+    void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

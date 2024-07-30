@@ -18,7 +18,7 @@ public class Gridmanager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance!= null)
+        if (Instance != null)
         {
             Destroy(this);
         }
@@ -37,7 +37,7 @@ public class Gridmanager : MonoBehaviour
     private void generateGrid()
     {
         float adjustment;
-        if (gridSize.x %2 ==0)
+        if (gridSize.x % 2 == 0)
         {
             adjustment = 1f;
         }
@@ -46,7 +46,7 @@ public class Gridmanager : MonoBehaviour
             adjustment = 0.5f;
         }
 
-        
+
         var relativeXZero = 0 - CellSize * gridSize.x / 2 + adjustment * CellSize;
         var relativeYZero = 0 - 5f;
         var x = gridSize.x;
@@ -59,7 +59,7 @@ public class Gridmanager : MonoBehaviour
                 var appleScript = block.GetComponent<AppleBlock>();
                 block.transform.position = new Vector3(relativeXZero + j, relativeYZero + i);
                 var joints = block.GetComponents<FixedJoint2D>();
-                if (i>0)
+                if (i > 0)
                 {
                     appleScript.below = blocks[^(int)gridSize.x];
                     joints[1].connectedBody = blocks[^(int)gridSize.x].GetComponent<Rigidbody2D>();
@@ -85,16 +85,16 @@ public class Gridmanager : MonoBehaviour
         for (int i = 0; i < blocks.Count; i++)
         {
             var apple = blocks[i].GetComponent<AppleBlock>();
-            if (i<blocks.Count-gridSize.x)
+            if (i < blocks.Count - gridSize.x)
             {
                 apple.above = blocks[i + (int)gridSize.x];
             }
 
-            if ((i+1)%(gridSize.x)!=0)
+            if ((i + 1) % (gridSize.x) != 0)
             {
                 apple.right = blocks[i + 1];
             }
-           
+
         }
     }
 }
