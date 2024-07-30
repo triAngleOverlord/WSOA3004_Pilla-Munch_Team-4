@@ -8,40 +8,73 @@ public class SolutionController : MonoBehaviour
 
     private float timecounter = 0;
     private float timeInterval = 2;
-    
+    public static SolutionController Instance;
     public List<GameObject> _blocks;
     // Start is called before the first frame update
     void Start()
     {
         _solutionNodes = GetComponentsInChildren<SolutionNode>();
     }
-    
-
-    private void CheckSolution()
+    private void Awake()
     {
+        if (Instance!= null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    private bool CheckSolution()
+    {
+        var correct = false;
         foreach (var solution in _solutionNodes)
         {
-            solution.Validate(false);
+            solution.Validate(!solution.ShouldContainABlock);
         }
+
         foreach (var block in _blocks)
         {
-            foreach (var solutionNode in _solutionNodes)
+           
+            if (block != null)
             {
-                if (solutionNode.ShouldContainABlock&&solutionNode.collider.bounds.Contains(block.transform.position))
+                 
+                foreach (var solutionNode in _solutionNodes)
                 {
-                    solutionNode.Validate(true);
+                    var type = solutionNode.ShouldContainABlock;
+                    if (solutionNode.ShouldContainABlock &&
+                        solutionNode.collider.bounds.Contains(block.transform.position))
+                    {
+                        solutionNode.Validate(type);
+                    }
+                    else if (!solutionNode.ShouldContainABlock&&solutionNode.collider.bounds.Contains(block.transform.position))
+                    {
+                        solutionNode.Validate(type);
+                    }
                 }
-                /*else if (!solutionNode.ShouldContainABlock&&!solutionNode.collider.bounds.Contains(block.transform.position))
-                {
-                    solutionNode.Validate(true);
-                }*/
             }
         }
+
+        foreach (var solnode in _solutionNodes)
+        {
+            if (!solnode.valid)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckSolution();
+        var correct =CheckSolution();
+        if (correct)
+        {
+            Debug.Log("yay");
+        }
     }
 }

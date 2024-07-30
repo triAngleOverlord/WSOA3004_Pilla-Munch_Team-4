@@ -332,6 +332,7 @@ public class WormController : MonoBehaviour
         if (other.CompareTag("Apple"))
         {
             Destroy(other.transform.parent.gameObject);
+            SolutionController.Instance._blocks.Remove(other.gameObject);
             Debug.Log("Destroying");
         }
     }

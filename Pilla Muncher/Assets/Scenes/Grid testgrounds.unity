@@ -1634,7 +1634,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edbbfb82c4cfca34ba9367997048ff5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: {x: 10, y: 10}
+  gridSize: {x: 9, y: 9}
   CellSize: 1
   blockPrefab: {fileID: 753271771121869037, guid: cd387ee420dcc9a4ebcda206354fbb28, type: 3}
   gridHolder: {fileID: 1515874781}
@@ -1811,7 +1811,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7966167305531795814, guid: 4f51ce0e2b0c4fd42be7f77da037f122, type: 3}
       propertyPath: ShouldContainABlock
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8809192425031819508, guid: 4f51ce0e2b0c4fd42be7f77da037f122, type: 3}
       propertyPath: ShouldContainABlock

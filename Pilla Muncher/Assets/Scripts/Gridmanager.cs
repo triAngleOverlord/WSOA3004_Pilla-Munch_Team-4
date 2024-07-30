@@ -13,8 +13,20 @@ public class Gridmanager : MonoBehaviour
     [SerializeField] private GameObject leftBlock;
     [SerializeField] private GameObject bottomBlock;
     [SerializeField] private SolutionController sc;
-
+    public static Gridmanager Instance;
     private List<GameObject> blocks = new List<GameObject>();
+
+    private void Awake()
+    {
+        if (Instance!= null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     void Start()
     {
