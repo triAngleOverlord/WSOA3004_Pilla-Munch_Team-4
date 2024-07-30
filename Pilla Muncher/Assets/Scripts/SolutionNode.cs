@@ -31,7 +31,14 @@ public class SolutionNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKey(KeyCode.D))
+        {
+            sr.enabled = true;
+        }
+        else
+        {
+            sr.enabled = false;
+        }
     }
     
 }

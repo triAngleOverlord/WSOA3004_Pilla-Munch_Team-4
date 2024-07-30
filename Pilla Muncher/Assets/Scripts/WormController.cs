@@ -275,12 +275,17 @@ public class WormController : MonoBehaviour
             if (hitCollider.CompareTag("Apple"))
             {
                 Debug.Log("next to apple");
-
-                isNextToApple = true;
-                break;
+                if (hitCollider.transform.position.y <= transform.position.y+0.3f) 
+                {
+                    isNextToApple = true;
+                    break;
+                }
+                
+                
             }
         }
 
+       
         SetGravity(!isNextToApple);
     }
 
