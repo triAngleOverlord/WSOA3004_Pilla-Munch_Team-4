@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.SceneManagement; // Add this directive
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class WormController : MonoBehaviour
 {
@@ -24,6 +24,9 @@ public class WormController : MonoBehaviour
     private bool isMoving = false;
     private bool canMove = true;
 
+    private Stack<List<Vector3>> positionHistory = new Stack<List<Vector3>>();
+    private Stack<List<Quaternion>> rotationHistory = new Stack<List<Quaternion>>();
+
     void Start()
     {
         segments.Add(head);
@@ -37,12 +40,7 @@ public class WormController : MonoBehaviour
     void Update()
     {
         HandleInput();
-
-        // Check for reset button press
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            ReloadScene();
-        }
+        HandleUndoAndReset();
     }
 
     void FixedUpdate()
@@ -52,6 +50,9 @@ public class WormController : MonoBehaviour
 
         if (isMoving && canMove)
         {
+            // Save current state before moving
+            SaveState();
+
             Move();
             isMoving = false;
         }
@@ -63,14 +64,12 @@ public class WormController : MonoBehaviour
     {
         if (canMove)
         {
-            bool isHeadTouchingGround = IsHeadTouchingGround();
-
             if (Input.GetKeyDown(KeyCode.UpArrow) && direction != Vector2.down)
             {
                 nextDirection = Vector2.up;
                 isMoving = true;
             }
-            else if (Input.GetKeyDown(KeyCode.DownArrow) && direction != Vector2.up && !isHeadTouchingGround)
+            else if (Input.GetKeyDown(KeyCode.DownArrow) && direction != Vector2.up)
             {
                 nextDirection = Vector2.down;
                 isMoving = true;
@@ -94,20 +93,18 @@ public class WormController : MonoBehaviour
         }
     }
 
-    bool IsHeadTouchingGround()
+    void HandleUndoAndReset()
     {
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(head.transform.position, 0.5f);
-        foreach (var hitCollider in hitColliders)
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (hitCollider.CompareTag("Ground"))
-            {
-                return true;
-            }
+            UndoLastMove();
         }
 
-        return false;
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            ResetScene();
+        }
     }
-
 
     void Move()
     {
@@ -160,7 +157,6 @@ public class WormController : MonoBehaviour
         segments[segments.Count - 1].transform.rotation = previousRotations[segments.Count - 2];
 
         // Update the tail sprite based on the previous rotation of the last body segment
-
         float tailRotationAngle = previousRotations[segments.Count - 2].eulerAngles.z;
         UpdateSprite(segments[segments.Count - 1], tailRotationAngle, false);
 
@@ -192,7 +188,6 @@ public class WormController : MonoBehaviour
                     spriteRenderer.sprite = headHorizontalSprite;
                     spriteRenderer.flipX = true; // Horizontal sprite facing right
                     spriteRenderer.flipY = false;
-
                 }
                 else if (rotationAngle == 90 || rotationAngle == -270)
                 {
@@ -219,7 +214,6 @@ public class WormController : MonoBehaviour
                     tailAnimator.Play("side pilla butt_FWD");
                     spriteRenderer.flipX = true; // Horizontal sprite facing right
                     spriteRenderer.flipY = false;
-
                 }
                 else if (rotationAngle == 90 || rotationAngle == -270)
                 {
@@ -233,7 +227,6 @@ public class WormController : MonoBehaviour
                     tailAnimator.Play("side pilla butt_FWD");
                     spriteRenderer.flipX = true; // Horizontal sprite facing left
                     spriteRenderer.flipY = true;
-
                 }
                 else if (rotationAngle == 270 || rotationAngle == -90)
                 {
@@ -331,7 +324,6 @@ public class WormController : MonoBehaviour
                 if (!enableGravity)
                 {
                     rb.constraints = RigidbodyConstraints2D.FreezeAll;
-                    //Debug.Log("Gravity set to 0");
                 }
                 else
                 {
@@ -368,7 +360,39 @@ public class WormController : MonoBehaviour
         }
     }
 
-    void ReloadScene()
+    void SaveState()
+    {
+        List<Vector3> currentPositions = new List<Vector3>();
+        List<Quaternion> currentRotations = new List<Quaternion>();
+        foreach (var segment in segments)
+        {
+            currentPositions.Add(segment.transform.position);
+            currentRotations.Add(segment.transform.rotation);
+        }
+        positionHistory.Push(currentPositions);
+        rotationHistory.Push(currentRotations);
+    }
+
+    void UndoLastMove()
+    {
+        if (positionHistory.Count > 0 && rotationHistory.Count > 0)
+        {
+            List<Vector3> lastPositions = positionHistory.Pop();
+            List<Quaternion> lastRotations = rotationHistory.Pop();
+
+            for (int i = 0; i < segments.Count; i++)
+            {
+                segments[i].transform.position = lastPositions[i];
+                segments[i].transform.rotation = lastRotations[i];
+
+                // Update the sprites based on the rotations
+                float rotationAngle = lastRotations[i].eulerAngles.z;
+                UpdateSprite(segments[i], rotationAngle, i == 0); // The first segment is the head
+            }
+        }
+    }
+
+    void ResetScene()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
