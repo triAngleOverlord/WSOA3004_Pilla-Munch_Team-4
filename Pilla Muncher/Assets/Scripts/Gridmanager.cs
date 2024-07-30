@@ -56,11 +56,13 @@ public class Gridmanager : MonoBehaviour
             for (int j = 0; j < x; j++)
             {
                 var block = Instantiate(blockPrefab, gridHolder.transform);
+                var appleScript = block.GetComponent<AppleBlock>();
                 block.transform.position = new Vector3(relativeXZero + j, relativeYZero + i);
                 var joints = block.GetComponents<FixedJoint2D>();
                 if (i>0)
                 {
-                    joints[1].connectedBody = blocks[blocks.Count - (int)gridSize.x].GetComponent<Rigidbody2D>();
+                    appleScript.below = blocks[^(int)gridSize.x];
+                    joints[1].connectedBody = blocks[^(int)gridSize.x].GetComponent<Rigidbody2D>();
                 }
                 else
                 {
@@ -69,6 +71,7 @@ public class Gridmanager : MonoBehaviour
                 if (j > 0)
                 {
                     joints[0].connectedBody = leftBlock.GetComponent<Rigidbody2D>();
+                    appleScript.left = leftBlock;
                 }
                 else
                 {
@@ -77,6 +80,21 @@ public class Gridmanager : MonoBehaviour
                 blocks.Add(block);
                 leftBlock = block;
             }
+        }
+
+        for (int i = 0; i < blocks.Count; i++)
+        {
+            var apple = blocks[i].GetComponent<AppleBlock>();
+            if (i<blocks.Count-gridSize.x)
+            {
+                apple.above = blocks[i + (int)gridSize.x];
+            }
+
+            if ((i+1)%(gridSize.x)!=0)
+            {
+                apple.right = blocks[i + 1];
+            }
+           
         }
     }
 }

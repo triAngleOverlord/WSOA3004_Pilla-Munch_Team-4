@@ -10,6 +10,12 @@ public class SolutionController : MonoBehaviour
     private float timeInterval = 2;
     public static SolutionController Instance;
     public List<GameObject> _blocks;
+
+    private bool checking = false;
+
+    private float timercounter = 0;
+
+    private float timeout = 2f;
     // Start is called before the first frame update
     void Start()
     {
@@ -74,7 +80,29 @@ public class SolutionController : MonoBehaviour
         var correct =CheckSolution();
         if (correct)
         {
-            Debug.Log("yay");
+            checking = true;
+            
         }
+        else
+        {
+            checking = false;
+            timecounter = 0;
+        }
+
+        if (checking)
+        {
+            timecounter += Time.deltaTime;
+            if (timecounter>= timeout)
+            {
+                Debug.Log("yaay");
+                Time.timeScale = 0;
+            }
+        }
+    }
+
+    private IEnumerator CheckSol()
+    {
+        CheckSolution();
+        yield return new WaitForSeconds(0.2f);
     }
 }

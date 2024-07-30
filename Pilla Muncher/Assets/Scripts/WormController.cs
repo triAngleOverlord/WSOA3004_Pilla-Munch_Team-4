@@ -137,6 +137,7 @@ public class WormController : MonoBehaviour
 
         // Update the tail sprite based on the previous rotation of the last body segment
         float tailRotationAngle = previousRotations[segments.Count - 2].eulerAngles.z;
+        float tailRotationAngle = previousRotations[segments.Count - 2].eulerAngles.z;
         UpdateSprite(segments[segments.Count - 1], tailRotationAngle, false);
 
         // Clamp the positions of all segments to ensure they are integers
