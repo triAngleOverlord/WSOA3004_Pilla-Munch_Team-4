@@ -15,6 +15,8 @@ public class WormController : MonoBehaviour
     public Sprite tailDownSprite;
     public Sprite tailHorizontalSprite; // Use this for both left and right
 
+    public Animator tailAnimator;
+
     private List<GameObject> segments = new List<GameObject>();
     private Vector2 direction = Vector2.up;
     private Vector2 nextDirection = Vector2.up;
@@ -189,6 +191,7 @@ public class WormController : MonoBehaviour
                 if (rotationAngle == 0)
                 {
                     spriteRenderer.sprite = tailHorizontalSprite;
+                    tailAnimator.Play("side pilla butt_FWD");
                     spriteRenderer.flipX = true; // Horizontal sprite facing right
                     spriteRenderer.flipY = false;
 
@@ -196,11 +199,13 @@ public class WormController : MonoBehaviour
                 else if (rotationAngle == 90 || rotationAngle == -270)
                 {
                     spriteRenderer.sprite = tailUpSprite;
+                    tailAnimator.Play("up pilla butt_DEFAULT");
                     spriteRenderer.flipX = true; // Up sprite facing left
                 }
                 else if (rotationAngle == 180 || rotationAngle == -180)
                 {
                     spriteRenderer.sprite = tailHorizontalSprite;
+                    tailAnimator.Play("side pilla butt_FWD");
                     spriteRenderer.flipX = true; // Horizontal sprite facing left
                     spriteRenderer.flipY = true;
 
@@ -208,6 +213,7 @@ public class WormController : MonoBehaviour
                 else if (rotationAngle == 270 || rotationAngle == -90)
                 {
                     spriteRenderer.sprite = tailDownSprite;
+                    tailAnimator.Play("down pilla_butt_FWD");
                     spriteRenderer.flipX = true; // Down sprite facing left
                 }
             }
