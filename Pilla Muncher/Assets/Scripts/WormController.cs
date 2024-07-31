@@ -303,7 +303,7 @@ public class WormController : MonoBehaviour
         {
             if (hitCollider.CompareTag("Apple"))
             {
-                Debug.Log("next to apple");
+                //Debug.Log("next to apple");
                 if (hitCollider.transform.position.y <= transform.position.y + 0.3f)
                 {
                     isNextToApple = true;
