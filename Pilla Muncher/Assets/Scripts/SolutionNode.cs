@@ -25,7 +25,7 @@ public class SolutionNode : MonoBehaviour
         else
         {
             valid = false;
-            sr.color = Color.red;
+            sr.color = Color.blue;
         }
     }
     // Update is called once per frame
