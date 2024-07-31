@@ -26,7 +26,7 @@ public class AppleBlock : MonoBehaviour
         {
             if (!joint.connectedBody)
             {
-                Debug.Log("checked");
+                
                 joint.enabled = false;
             }
         }
