@@ -216,7 +216,7 @@ Transform:
   - {fileID: 2866820540394406928}
   - {fileID: 1378005727392887646}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6702325175351596993
 GameObject:
@@ -567,7 +567,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.95, y: 0.95}
+  m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
 --- !u!233 &5245499746138986582
 HingeJoint2D:
