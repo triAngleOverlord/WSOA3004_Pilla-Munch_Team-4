@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SolutionController : MonoBehaviour
 {
@@ -14,11 +15,15 @@ public class SolutionController : MonoBehaviour
     private bool checking = false;
 
     private float timercounter = 0;
+    private float timeout = 2f; 
+    private float finTimerCounter = 0;
+    private float finTimeOut = 2f;
 
-    private float timeout = 2f;
+    private bool fin;
     // Start is called before the first frame update
     void Start()
     {
+        fin = false;
         _solutionNodes = GetComponentsInChildren<SolutionNode>();
     }
     private void Awake()
@@ -95,8 +100,18 @@ public class SolutionController : MonoBehaviour
             if (timecounter>= timeout)
             {
                 Debug.Log("yaay");
-                Time.timeScale = 0;
+                fin = true;
             }
+        }
+
+        if (fin)
+        {
+            finTimerCounter += Time.deltaTime;
+        }
+
+        if (finTimerCounter>=finTimeOut)
+        {
+            SceneManager.LoadScene(0);
         }
     }
 
