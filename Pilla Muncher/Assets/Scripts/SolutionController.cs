@@ -20,11 +20,13 @@ public class SolutionController : MonoBehaviour
     private float finTimeOut = 2f;
 
     private bool fin;
+    private bool heart;
     // Start is called before the first frame update
     void Start()
     {
         fin = false;
         _solutionNodes = GetComponentsInChildren<SolutionNode>();
+        heart = false;
     }
     private void Awake()
     {
@@ -96,11 +98,18 @@ public class SolutionController : MonoBehaviour
 
         if (checking)
         {
+            if (heart == false)
+            {
+                Instantiate(Resources.Load("heart anim"));
+                Instantiate(Resources.Load("complete title"));
+                heart = true;
+            }
             timecounter += Time.deltaTime;
             if (timecounter>= timeout)
             {
                 Debug.Log("yaay");
                 fin = true;
+                
             }
         }
 
@@ -119,5 +128,6 @@ public class SolutionController : MonoBehaviour
     {
         CheckSolution();
         yield return new WaitForSeconds(0.2f);
+        
     }
 }
