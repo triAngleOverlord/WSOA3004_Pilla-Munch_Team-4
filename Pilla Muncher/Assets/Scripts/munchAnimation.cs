@@ -12,7 +12,7 @@ public class munchAnimation : MonoBehaviour
 
     IEnumerator destroySelf()
     {
-        yield return new WaitForSecondsRealtime(1);
+        yield return new WaitForSecondsRealtime(0.5f);
         Destroy(gameObject);
     }
 }

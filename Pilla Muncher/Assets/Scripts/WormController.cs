@@ -371,6 +371,7 @@ public class WormController : MonoBehaviour
         {
             Destroy(other.transform.parent.gameObject);
             SolutionController.Instance._blocks.Remove(other.gameObject);
+            Instantiate(Resources.Load("munching anim"), transform);
             Debug.Log("Destroying");
         }
     }
