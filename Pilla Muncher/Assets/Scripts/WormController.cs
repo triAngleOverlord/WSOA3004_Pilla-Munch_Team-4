@@ -304,15 +304,22 @@ public class WormController : MonoBehaviour
             if (hitCollider.CompareTag("Apple"))
             {
                 //Debug.Log("next to apple");
-                if (hitCollider.transform.position.y <= transform.position.y + 0.3f)
+
+                // Check if the apple is within 0.3 units above or below the worm's body segment
+                if (Mathf.Abs(hitCollider.transform.position.y - body.transform.position.y) <= 0.1f)
                 {
                     isNextToApple = true;
+                    SetGravity(false);  // Disable gravity
                     break;
                 }
             }
         }
 
-        SetGravity(!isNextToApple);
+        // If no apple is found within the range, enable gravity
+        if (!isNextToApple)
+        {
+            SetGravity(true);
+        }
     }
 
     public void SetGravity(bool enableGravity)
