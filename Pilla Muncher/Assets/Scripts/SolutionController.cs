@@ -15,12 +15,13 @@ public class SolutionController : MonoBehaviour
     private bool checking = false;
 
     private float timercounter = 0;
-    private float timeout = 2f; 
+    private float timeout = 2f;
     private float finTimerCounter = 0;
     private float finTimeOut = 2f;
 
     private bool fin;
     private bool heart;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,9 +29,10 @@ public class SolutionController : MonoBehaviour
         _solutionNodes = GetComponentsInChildren<SolutionNode>();
         heart = false;
     }
+
     private void Awake()
     {
-        if (Instance!= null)
+        if (Instance != null)
         {
             Destroy(this);
         }
@@ -50,10 +52,8 @@ public class SolutionController : MonoBehaviour
 
         foreach (var block in _blocks)
         {
-           
             if (block != null)
             {
-                 
                 foreach (var solutionNode in _solutionNodes)
                 {
                     var type = solutionNode.ShouldContainABlock;
@@ -62,7 +62,7 @@ public class SolutionController : MonoBehaviour
                     {
                         solutionNode.Validate(type);
                     }
-                    else if (!solutionNode.ShouldContainABlock&&solutionNode.collider.bounds.Contains(block.transform.position))
+                    else if (!solutionNode.ShouldContainABlock && solutionNode.collider.bounds.Contains(block.transform.position))
                     {
                         solutionNode.Validate(type);
                     }
@@ -84,11 +84,10 @@ public class SolutionController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var correct =CheckSolution();
+        var correct = CheckSolution();
         if (correct)
         {
             checking = true;
-            
         }
         else
         {
@@ -98,9 +97,8 @@ public class SolutionController : MonoBehaviour
 
         if (checking)
         {
-           
             timecounter += Time.deltaTime;
-            if (timecounter>= timeout)
+            if (timecounter >= timeout)
             {
                 if (heart == false)
                 {
@@ -110,7 +108,6 @@ public class SolutionController : MonoBehaviour
                 }
                 Debug.Log("yaay");
                 fin = true;
-                
             }
         }
 
@@ -119,9 +116,15 @@ public class SolutionController : MonoBehaviour
             finTimerCounter += Time.deltaTime;
         }
 
-        if (finTimerCounter>=finTimeOut)
+        if (finTimerCounter >= finTimeOut)
         {
             SceneManager.LoadScene(0);
+        }
+
+        // Check for 'L' key press to load the main menu
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SceneManager.LoadScene("Main Menu"); // Assuming the main menu scene is named "MainMenu"
         }
     }
 
@@ -129,6 +132,5 @@ public class SolutionController : MonoBehaviour
     {
         CheckSolution();
         yield return new WaitForSeconds(0.2f);
-        
     }
 }
