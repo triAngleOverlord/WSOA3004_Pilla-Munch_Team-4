@@ -98,15 +98,16 @@ public class SolutionController : MonoBehaviour
 
         if (checking)
         {
-            if (heart == false)
-            {
-                Instantiate(Resources.Load("heart anim"));
-                Instantiate(Resources.Load("complete title"));
-                heart = true;
-            }
+           
             timecounter += Time.deltaTime;
             if (timecounter>= timeout)
             {
+                if (heart == false)
+                {
+                    Instantiate(Resources.Load("heart anim"));
+                    Instantiate(Resources.Load("complete title"));
+                    heart = true;
+                }
                 Debug.Log("yaay");
                 fin = true;
                 
