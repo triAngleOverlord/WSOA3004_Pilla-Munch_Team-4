@@ -118,7 +118,7 @@ public class SolutionController : MonoBehaviour
 
         if (finTimerCounter >= finTimeOut)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(2);
         }
 
         // Check for 'L' key press to load the main menu
